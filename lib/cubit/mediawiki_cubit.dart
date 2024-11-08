@@ -194,7 +194,11 @@ class MediawikiCubit extends Cubit<MediawikiState> {
     return 'Expenses-$year-$m';
   }
 
-  Future<void> updateYearAndMonth(int year, int month) async {
+  Future<void> updateYearAndMonth(
+    int year,
+    int month, {
+    String? filterValue,
+  }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setInt(_keyLastYear, year);
@@ -208,6 +212,7 @@ class MediawikiCubit extends Cubit<MediawikiState> {
           month,
           IncomePage.fromWikiText(content),
           ExpensePage.fromWikiText(content),
+          filterValue: filterValue,
         ),
       );
     } catch (e) {
@@ -330,7 +335,8 @@ class MediawikiCubit extends Cubit<MediawikiState> {
           content,
           createOnly: false,
         );
-        await updateYearAndMonth(state.year, state.month);
+        await updateYearAndMonth(state.year, state.month,
+            filterValue: state.filterValue);
       } catch (e) {
         log('Error: $e');
         emit(MediaWikiError(e.toString()));
