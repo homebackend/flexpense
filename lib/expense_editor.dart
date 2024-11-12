@@ -102,13 +102,13 @@ class _ExpenseEditorState extends State<ExpenseEditor> {
                       modified: true,
                       section: _section,
                       date: _date,
-                      description: _description.replaceAll('|', ' '),
-                      transaction: _transaction.replaceAll('|', ' '),
+                      description: widget.normalizeString(_description),
+                      transaction: widget.normalizeString(_transaction),
                       expenseType: _expenseType,
-                      expenseText: _expenseText.replaceAll('|', ' '),
+                      expenseText: widget.normalizeString(_expenseText),
                     );
                     _section = '';
-                    _date = '';
+                    //_date = '';
                     _description = '';
                     _transaction = '';
                     _expenseType = ExpenseType.none;
@@ -145,6 +145,9 @@ class _ExpenseEditorState extends State<ExpenseEditor> {
     ExpenseEditorUpdatedState stateExpense,
   ) {
     final values = List<String>.from(widget.state.expensePage.sectionData.keys);
+    if (!values.contains('Expense')) {
+      values.add('Expense');
+    }
 
     if (_section.isEmpty || !values.contains(_section)) {
       if ((stateExpense.section.isEmpty && values.isNotEmpty) ||
@@ -157,7 +160,7 @@ class _ExpenseEditorState extends State<ExpenseEditor> {
 
     return widget.dropDownMenu<String>(
       'Section Name',
-      List<String>.from(widget.state.expensePage.sectionData.keys),
+      values,
       _section,
       (section) => section,
       (value) {

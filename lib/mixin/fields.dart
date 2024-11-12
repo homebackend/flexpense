@@ -10,6 +10,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 mixin FormFields {
+  String normalizeString(String value) {
+    final splits = value.split('|');
+    String result = '';
+    bool isLink = false;
+    for (final s in splits) {
+      if (isLink) {
+        result += '|$s';
+        if (s.contains(']]')) {
+          isLink = false;
+        }
+      } else {
+        result += ' $s';
+        if (s.contains('[[')) {
+          isLink = true;
+        }
+      }
+    }
+    return result;
+  }
+
   Widget verticalSpacing() {
     return const SizedBox(height: 8.0);
   }
