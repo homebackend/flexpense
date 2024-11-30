@@ -80,8 +80,8 @@ class _IncomeEditorState extends State<IncomeEditor> {
                 final row = IncomeRow(
                   modified: true,
                   date: _date,
-                  description: _description.replaceAll('|', ' '),
-                  transaction: _transaction.replaceAll('|', ' '),
+                  description: widget.normalizeString(_description),
+                  transaction: widget.normalizeString(_transaction),
                 );
                 _date = '';
                 _description = '';
